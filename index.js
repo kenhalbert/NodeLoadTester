@@ -16,36 +16,36 @@ const requestTimeAverageInMilliseconds = SimpleMovingAverage({ datasetSize: 100 
 const requestStats = RequestStats(requestTimeAverageInMilliseconds);
 
 const makeRequest = RequestExecutor({
-	requestor,
-	requestStats,
-	requestTimeAverageInMilliseconds
+  requestor,
+  requestStats,
+  requestTimeAverageInMilliseconds
 });
 
 const rampUpMonitor = RampUpMonitor({
-	numberOfConcurrentRequests: config.numberOfConcurrentRequests,
-	onRampUpComplete: () => {
-		console.log('ramped up!');
-	},
-	onNewRequestorStarted: () => {
-		console.log('started new requestor');
-	}
+  numberOfConcurrentRequests: config.numberOfConcurrentRequests,
+  onRampUpComplete: () => {
+    console.log('ramped up!');
+  },
+  onNewRequestorStarted: () => {
+    console.log('started new requestor');
+  }
 });
 
 console.log('Starting with config:  ', config);
 
 setInterval(() => {
-	console.log('throughput (request/minute):', requestStats.requestsPerMinute);
+  console.log('throughput (request/minute):', requestStats.requestsPerMinute);
 }, 5000);
 
 setInterval(() => {
-	console.log('stats dump', JSON.stringify(requestStats));
+  console.log('stats dump', JSON.stringify(requestStats));
 }, 30000);
 
 for (let i = 0; i < config.numberOfConcurrentRequests; i++)
 {
-	setTimeout(() => {
-		setInterval(makeRequest, config.requestIntervalInSeconds * 1000);
+  setTimeout(() => {
+    setInterval(makeRequest, config.requestIntervalInSeconds * 1000);
 
-		rampUpMonitor.requestorStarted();
-	}, config.requestStartupIntervalInMilliseconds * i);
+    rampUpMonitor.requestorStarted();
+  }, config.requestStartupIntervalInMilliseconds * i);
 }

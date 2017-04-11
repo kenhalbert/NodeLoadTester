@@ -1,19 +1,19 @@
 const factory = (options) => {  
-	let rampUpCounter = options.numberOfConcurrentRequests,
-		onRampUpComplete = options.onRampUpComplete,
-		onNewRequestorStarted = options.onNewRequestorStarted;
+  let rampUpCounter = options.numberOfConcurrentRequests,
+    onRampUpComplete = options.onRampUpComplete,
+    onNewRequestorStarted = options.onNewRequestorStarted;
 
-	const requestorStarted = () => {
-		rampUpCounter--;
+  const requestorStarted = () => {
+    rampUpCounter--;
 
-		if (onNewRequestorStarted) onNewRequestorStarted();
+    if (onNewRequestorStarted) onNewRequestorStarted();
 
-		if (onRampUpComplete && rampUpCounter == 0) onRampUpComplete();
-	};
+    if (onRampUpComplete && rampUpCounter == 0) onRampUpComplete();
+  };
 
-	return {
-		requestorStarted
-	};
+  return {
+    requestorStarted
+  };
 };
 
 module.exports = factory;
