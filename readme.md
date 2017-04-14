@@ -15,4 +15,4 @@ First you'll need to implement your own requestor module.  A requestor is just a
 After you've created your requestor, run the app like this:
 `node index --requestor ./require/path/to/myrequestor.js --throughput 100 --rampUpTimeInSeconds 60`
 
-The requestor & throughput arguments are required.  If no rampup time is specified, it will default to 0.  Throughput is in requests per second - change it to whatever you need it to be.
+The requestor & throughput arguments are required.  If no rampup time is specified, it will default to 0.  Throughput is in requests per minute - change it to whatever you need it to be.
