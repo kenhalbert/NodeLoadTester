@@ -1,6 +1,7 @@
 const commandLineArgs = require('command-line-args');
 const commandLineOptionDefs = require('./commandLineOptionDefinitions');
 const getConfig = require('./getConfig');
+const getRampUpFunction = require('./getRampUpFunction');
 const SimpleMovingAverage = require('./SimpleMovingAverage');
 const RequestExecutor = require('./RequestExecutor');
 const RequestStats = require('./RequestStats');
@@ -35,12 +36,10 @@ const startRequestingAtFullThroughput = () => setInterval(makeRequest, config.re
 if (!config.rampUpTimeInSeconds)
   startRequestingAtFullThroughput()
 else {
-  const rampUpFunc = (timeElapsedInSeconds) => {
-    // given rampup time of 60 and target of 100 (for now, just for testign the core algo...)
-    // y at x = 60 is 100
-    // So one function that will work is y = (1 2/3)x
-    return (1 + 2/3) * timeElapsedInSeconds;
-  };
+  const rampUpFunc = getRampUpFunction({
+    targetThroughput: config.targetThroughput,
+    rampUpTimeInSeconds: config.rampUpTimeInSeconds
+  });
 
   let requestCounter = 0,
     currentTargetThroughput = 0;
