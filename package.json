@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
+    "algebra.js": "^0.2.6",
     "command-line-args": "^4.0.2",
     "superagent": "^3.5.2"
   },

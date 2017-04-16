@@ -1,17 +1,37 @@
-const linearRampupFuncFactory = (rampUpTimeInSeconds, targetThroughput) => {
-  const slope = targetThroughput / rampUpTimeInSeconds;
+const algebra = require('algebra.js');
 
-  return (timeElapsedInSeconds) => {
-    return slope * timeElapsedInSeconds;
-  };
+const rampUpEquationsByDegree = {
+  1: (variables) => {
+    const y = variables.y || 'y',
+      x = variables.x || 'x',
+      m = variables.m || 'm';
+
+      return `${y} = ${m}*${x}`;
+  }
 };
 
-const getFactory = (degree) => {
-  switch (degree) {
-    case 1:
-      return linearRampupFuncFactory;
-    default: 
-      throw Error('unsupported degree ' + degree);
+const nthDegreeRampUpFuncFactory = (rampUpTimeInSeconds, targetThroughput, degree) => {
+  const equation = rampUpEquationsByDegree[degree];
+
+  if (!equation) 
+    throw Error(`Currently there's no support for degree ${degree}, but you're free to add it yourself if you need it.`)
+
+  const parameterizedEquation = equation({ 
+    x: rampUpTimeInSeconds,
+    y: targetThroughput
+  });
+  console.log(parameterizedEquation);
+  const slope = algebra.parse(parameterizedEquation).solveFor('m');
+
+  return (runTimeInSeconds) => {
+    const expression = equation({
+      m: slope,
+      x: runTimeInSeconds
+    });
+
+    const currentThroughput = algebra.parse(expression).solveFor('y');
+
+    return currentThroughput.numer / currentThroughput.denom;
   }
 };
 
@@ -30,7 +50,7 @@ const factory = (options) => {
       // use algebrajs to solve for m:  https://github.com/nicolewhite/algebra.js
       // to parse & evaluate an expression in mathjs, use math.parse.eval()
 
-  return getFactory(rampUpEquationDegree)(rampUpTimeInSeconds, targetThroughput);
+  return nthDegreeRampUpFuncFactory(rampUpTimeInSeconds, targetThroughput, rampUpEquationDegree);
 };
 
 module.exports = factory;
