@@ -8,6 +8,9 @@ const algebra = require('algebra.js');
 
    In fact - maybe instead of having the app do integration itself, why not just make the rampup equation fully configurable?  I think
    that would be more useful and easier to implement. 
+
+   I could change the degree CLI parameter to be just a name, for built-in functions (e.g. "linear", "quadratic") and then add support
+   for another parameter called --rampUpEquation to allow a custom equation to be passed in.
 */
 const rampUpEquationsByDegree = {
   1: (variables) => {
