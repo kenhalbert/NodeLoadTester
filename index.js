@@ -38,7 +38,8 @@ if (!config.rampUpTimeInSeconds)
 else {
   const rampUpFunc = getRampUpFunction({
     targetThroughput: config.targetThroughput,
-    rampUpTimeInSeconds: config.rampUpTimeInSeconds
+    rampUpTimeInSeconds: config.rampUpTimeInSeconds,
+    rampUpEquationDegree: config.rampUpEquationDegree
   });
 
   let requestCounter = 0,

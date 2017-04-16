@@ -1,6 +1,24 @@
+const linearRampupFuncFactory = (rampUpTimeInSeconds, targetThroughput) => {
+  const slope = targetThroughput / rampUpTimeInSeconds;
+
+  return (timeElapsedInSeconds) => {
+    return slope * timeElapsedInSeconds;
+  };
+};
+
+const getFactory = (degree) => {
+  switch (degree) {
+    case 1:
+      return linearRampupFuncFactory;
+    default: 
+      throw Error('unsupported degree ' + degree);
+  }
+};
+
 const factory = (options) => {
   const targetThroughput = options.targetThroughput,
-    rampUpTimeInSeconds = options.rampUpTimeInSeconds;
+    rampUpTimeInSeconds = options.rampUpTimeInSeconds,
+    rampUpEquationDegree = options.rampUpEquationDegree;
 
 
   // start with a linear rampup implementation and then add support for others later using math.js calculus functions
@@ -12,11 +30,7 @@ const factory = (options) => {
       // use algebrajs to solve for m:  https://github.com/nicolewhite/algebra.js
       // to parse & evaluate an expression in mathjs, use math.parse.eval()
 
-  const slope = targetThroughput / rampUpTimeInSeconds;
-
-  return (timeElapsedInSeconds) => {
-    return slope * timeElapsedInSeconds;
-  };
+  return getFactory(rampUpEquationDegree)(rampUpTimeInSeconds, targetThroughput);
 };
 
 module.exports = factory;

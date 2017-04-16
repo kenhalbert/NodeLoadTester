@@ -3,5 +3,6 @@ module.exports = [
   { name: 'throughput', alias: 't', type: Number },
   { name: 'rampUpTimeInSeconds', alias: 'u', type: Number },
   { name: 'rampUpAdjustmentPeriodInMilliseconds', alias: 'a', type: Number },
+  { name: 'rampUpEquationDegree', alias: 'd', type: Number },
 ];
 

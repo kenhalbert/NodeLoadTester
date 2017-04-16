@@ -3,6 +3,7 @@ module.exports = (args) => {
   const rampUpTimeInSeconds = args.rampUpTimeInSeconds || 0;
   const requestor = args.requestor || './requestors/example';
   const rampUpAdjustmentPeriodInMilliseconds = args.rampUpAdjustmentPeriodInMilliseconds || 100;
+  const rampUpEquationDegree = args.rampUpEquationDegree || 1;
 
   // computed config
   const requestIntervalInSeconds = 60 / targetThroughput;
@@ -12,6 +13,7 @@ module.exports = (args) => {
     targetThroughput,
     requestIntervalInSeconds,
     rampUpTimeInSeconds,
-    rampUpAdjustmentPeriodInMilliseconds
+    rampUpAdjustmentPeriodInMilliseconds,
+    rampUpEquationDegree
   };
 };
