@@ -30,38 +30,44 @@ setInterval(() => {
   console.log('stats dump', JSON.stringify(requestStats));
 }, 30000);
 
+const startRequestingAtFullThroughput = () => setInterval(makeRequest, config.requestIntervalInSeconds * 1000);
+
 if (!config.rampUpTimeInSeconds)
-  setInterval(makeRequest, config.requestIntervalInSeconds * 1000);
+  startRequestingAtFullThroughput()
 else {
-  let intervalId = null
+  const rampUpFunc = (timeElapsedInSeconds) => {
+    // given rampup time of 60 and target of 100 (for now, just for testign the core algo...)
+    // y at x = 60 is 100
+    // So one function that will work is y = (1 2/3)x
+    return (1 + 2/3) * timeElapsedInSeconds;
+  };
 
-  const base = config.requestIntervalInSeconds * config.rampUpAdjustments; 
-  const adjustmentPeriodInMilliseconds = (config.rampUpTimeInSeconds / config.rampUpAdjustments) * 1000;
+  let requestCounter = 0,
+    currentTargetThroughput = 0;
 
-  /*
-    Thoughts on rampup approach:
-      1.  Use recursive setTimeout calls with a gradually-decreasing interval until request throughput has been reached, then 
-          transition to setInterval
-            - May need to use calculus to get that to work - should be fun
-      2.  Also consider adding support for rampup strategies so they can be configured & switched out
-  */
+  const rampUpLogInterval = setInterval(() => {
+    console.log(`rampup currently targeting ${currentTargetThroughput} requests per minute`);
+  }, 10000);
 
-  for (let i = 0; i < config.rampUpAdjustments; i++) {
-    setTimeout(() => {
-      if (intervalId) clearInterval(intervalId); 
+  const rampUpInterval = setInterval(() => {
+    if (requestStats.runTime / 1000 >= config.rampUpTimeInSeconds) {
+      console.log('ramped up!')
 
-      const newRequestInterval = (base - config.requestIntervalInSeconds * i) * 1000;
-      const newThroughput = (60 / (newRequestInterval / 1000));
+      clearInterval(rampUpInterval);
+      clearInterval(rampUpLogInterval);
 
-      console.log('raising target throughput to ' + newThroughput + ' per minute');
+      startRequestingAtFullThroughput();
+    }
 
-      intervalId = setInterval(makeRequest, newRequestInterval);
-    }, adjustmentPeriodInMilliseconds * (i + 1));
-  }
+    currentTargetThroughput = rampUpFunc(requestStats.runTime / 1000);
+    const requestsThisPeriod = currentTargetThroughput * (config.rampUpAdjustmentPeriodInMilliseconds / (1000 * 60))
+    requestCounter += requestsThisPeriod;
 
-  setTimeout(() => {
-    console.log('rampup complete!');
-  }, adjustmentPeriodInMilliseconds * config.rampUpAdjustments);
+    while (requestCounter > 1) {
+      makeRequest();
+      requestCounter--;
+    }
+  }, config.rampUpAdjustmentPeriodInMilliseconds);
 }
 
 
