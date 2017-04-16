@@ -49,6 +49,7 @@ else {
     console.log(`rampup currently targeting ${currentTargetThroughput} requests per minute`);
   }, 10000);
 
+  // TODO add a brief explanation of how this algorithm works here
   const rampUpInterval = setInterval(() => {
     if (requestStats.runTime / 1000 >= config.rampUpTimeInSeconds) {
       console.log('ramped up!')
