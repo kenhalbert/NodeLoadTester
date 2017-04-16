@@ -13,8 +13,8 @@ Use this if you need to test that a service/website can handle a given throughpu
 First you'll need to implement your own requestor module.  A requestor is just a function that returns an ES6 promise.  Use the example requestor (./requestors/example.js) as a starting point.  You don't have to use superagent; you can do whatever you need to in a requestor.  Just be sure it returns an ES6 promise.
 
 After you've created your requestor, run the app like this:
-`node index --requestor ./require/path/to/myrequestor.js --throughput 100 --rampUpTimeInSeconds 60 --rampUpAdjustments 10`
+`node index --requestor ./require/path/to/myrequestor.js --throughput 100 --rampUpTimeInSeconds 60 --rampUpEquationDegree 1`
 
-The `requestor` & `throughput` arguments are required.  If no `rampUpTimeInSeconds` is specified, it will default to 0.  If you do specify a rampup time, you must also provide a value for `rampUpAdjustments` (see below).  Throughput is in requests per minute - change it to whatever you need it to be.  
+The `requestor` & `throughput` arguments are required.  If no `rampUpTimeInSeconds` is specified, it will default to 0.  If you do specify a rampup time, you can also optionally set a value for `rampUpEquationDegree` (see below) - if you don't, it will default to 1.  Throughput is in requests per minute - change it to whatever you need it to be.  
 
-The `rampUpAdjustments` argument determines how many times the throughput will be adjusted over the course of the rampup period to reach the target throughput.  The higher this value is, the smaller & more frequent throughput increases during rampup will be.
+The `rampUpEquationDegree` argument determines the degree of the equation used to calculate throughput during the rampup period.  Using the default value of 1, rampup will be linear and throughput will increase linearly as a function of time.  If you set the value to 2, rampup will be quadratic and throughput will increase exponentially (by a power of 2) as a function of time.

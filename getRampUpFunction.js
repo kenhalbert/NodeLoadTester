@@ -1,7 +1,11 @@
 const algebra = require('algebra.js');
 
 /* I couldn't find a math library for JavaScript that can do symbolic integration.  Until I find a way to do that, I have to hard-code the
-   equations I need here. */
+   equations I need here. 
+
+   TODO: the collection below only contains integrals of y=mx+b, but there's no reason for the app not to support any 
+   function that has terms of y, x, & m!  (and maybe soon, b) 
+*/
 const rampUpEquationsByDegree = {
   1: (variables) => {
     const y = variables.y || 'y',
