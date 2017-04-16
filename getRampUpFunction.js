@@ -40,6 +40,7 @@ const nthDegreeRampUpFuncFactory = (rampUpTimeInSeconds, targetThroughput, degre
     y: targetThroughput
   });
 
+  // first, solve for the slope that will yield y = targetThroughput at x = rampUpTimeInSeconds
   const slope = algebra.parse(parameterizedEquation).solveFor('m');
 
   return (runTimeInSeconds) => {
@@ -48,6 +49,7 @@ const nthDegreeRampUpFuncFactory = (rampUpTimeInSeconds, targetThroughput, degre
       x: runTimeInSeconds
     });
 
+    // calculate the current throughput using the value for slope we got above
     const currentThroughput = algebra.parse(expression).solveFor('y');
 
     return currentThroughput.numer / currentThroughput.denom;
