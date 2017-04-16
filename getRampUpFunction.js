@@ -4,7 +4,10 @@ const algebra = require('algebra.js');
    equations I need here. 
 
    TODO: the collection below only contains integrals of y=mx+b, but there's no reason for the app not to support any 
-   function that has terms of y, x, & m!  (and maybe soon, b) 
+   function that has terms of y, x, & m!  (and maybe soon, b)
+
+   In fact - maybe instead of having the app do integration itself, why not just make the rampup equation fully configurable?  I think
+   that would be more useful and easier to implement. 
 */
 const rampUpEquationsByDegree = {
   1: (variables) => {
