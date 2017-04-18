@@ -34,7 +34,7 @@ setInterval(() => {
 const startRequestingAtFullThroughput = () => setInterval(makeRequest, config.requestIntervalInSeconds * 1000);
 
 if (!config.rampUpTimeInSeconds)
-  startRequestingAtFullThroughput()
+  startRequestingAtFullThroughput();
 else {
   const rampUpFunc = getRampUpFunction({
     targetThroughput: config.targetThroughput,
