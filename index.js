@@ -50,6 +50,10 @@ else {
   }, 10000);
 
   // TODO add a brief explanation of how this algorithm works here
+  /* TODO instead of approximating the graph this way, I should try finding the area under
+     the curve in the interval rampUpAdjustmentPeriodInMilliseconds to determine the number
+     of requests that need to be made in that period, and then try to distribute them across
+     the interval as evenly as possible if requestCounter > 1 */
   const rampUpInterval = setInterval(() => {
     if (requestStats.runTime / 1000 >= config.rampUpTimeInSeconds) {
       console.log('ramped up!')
