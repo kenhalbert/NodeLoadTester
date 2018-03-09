@@ -1,4 +1,4 @@
-# NodeLoadTester
+# node-load-tester
 
 A simple load testing tool I built with Node.  I wrote this because I wanted a load testing tool that requires minimal configuration and lets me do most of what I need to do in code.
 
